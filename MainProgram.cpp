@@ -55,13 +55,21 @@ private:
 public:
     // --------------------------------------------------
     // Parameterized Constructor
+    
     // --------------------------------------------------
     // - Allocate memory for a copy of the input string
     // - Copy the string content into m_data
     // - Set m_length to the length of the string
     // - Increment g_constructorCount
     DynamicBuffer(const char* input) {
+        
+        
         // TODO: Implement constructor
+        g_constructorCount ++;
+        m_length= strlen(input);
+        
+        m_data= new char[m_length + 1];
+        strcpy(m_data, input);
         //   1. Increment g_constructorCount
         //   2. Calculate length of input using strlen()
         //   3. Allocate m_data with new char[m_length + 1]
@@ -75,6 +83,9 @@ public:
     // - Increment g_destructorCount
     ~DynamicBuffer() {
         // TODO: Implement destructor
+        
+        g_destructorCount ++;
+        delete[] m_data;
         //   1. Increment g_destructorCount
         //   2. Delete the dynamically allocated array (delete[])
     }
@@ -87,6 +98,13 @@ public:
     // - Increment g_copyConstructorCount
     DynamicBuffer(const DynamicBuffer& other) {
         // TODO: Implement copy constructor
+        
+        g_copyConstructorCount++;
+        m_length = other.getLength();
+        m_data = new char[m_length + 1];
+        strcpy(m_data, other.getData() );
+        
+        
         //   1. Increment g_copyConstructorCount
         //   2. Copy m_length from other
         //   3. Allocate new memory: new char[m_length + 1]
@@ -103,6 +121,15 @@ public:
     // - Return *this
     DynamicBuffer& operator=(const DynamicBuffer& other) {
         // TODO: Implement copy assignment operator
+        g_assignmentCount++;
+        if(this == &other){
+             return *this;
+       
+        } 
+        delete[] m_data;
+        m_length = other.getLength();
+        m_data = new char[m_length + 1];
+        strcpy(m_data, other.getData());
         //   1. Increment g_assignmentCount
         //   2. Check for self-assignment (if this == &other)
         //   3. Delete old m_data (delete[])
@@ -111,6 +138,7 @@ public:
         //   6. Copy string data using strcpy()
         //   7. Return *this
         return *this;
+       
     }
 
     // --------------------------------------------------
@@ -127,6 +155,12 @@ public:
     // - Copy the new string
     void setData(const char* newData) {
         // TODO: Implement setData
+        delete[] m_data;
+        m_length= strlen(newData);
+        
+        m_data = new char[m_length + 1];
+         strcpy( m_data, newData);
+         
         //   1. Delete old m_data (delete[])
         //   2. Calculate new length with strlen()
         //   3. Allocate new memory: new char[m_length + 1]
